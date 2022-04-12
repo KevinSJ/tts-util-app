@@ -4,8 +4,8 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.danefinlay.ttsutil.*
 import org.jetbrains.anko.longToast
 
@@ -48,10 +48,10 @@ abstract class MyAppCompatActivity : AppCompatActivity(),
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // Save data.
-        outState?.run {
+        outState.run {
             putParcelable("mLastStatusUpdate", mLastStatusUpdate)
             putParcelable("mLastChosenFileEvent", mLastChosenFileEvent)
         }

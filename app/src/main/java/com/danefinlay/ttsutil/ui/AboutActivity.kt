@@ -21,10 +21,10 @@
 package com.danefinlay.ttsutil.ui
 
 import android.os.Bundle
-import android.support.v4.content.pm.PackageInfoCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.pm.PackageInfoCompat
 import com.danefinlay.ttsutil.APP_NAME
 import com.danefinlay.ttsutil.R
 import org.jetbrains.anko.find

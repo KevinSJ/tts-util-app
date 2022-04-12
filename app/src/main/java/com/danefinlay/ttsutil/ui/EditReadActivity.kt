@@ -47,7 +47,7 @@ class EditReadActivity : TTSActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item?.itemId == android.R.id.home) {
             onBackPressed()
             finish()

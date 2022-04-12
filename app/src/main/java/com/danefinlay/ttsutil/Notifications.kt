@@ -26,10 +26,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import com.danefinlay.ttsutil.ui.MainActivity
 import org.jetbrains.anko.notificationManager
-import java.lang.RuntimeException
 
 val notificationTasks = listOf(TASK_ID_READ_TEXT, TASK_ID_WRITE_FILE,
         TASK_ID_PROCESS_FILE)

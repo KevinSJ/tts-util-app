@@ -21,8 +21,12 @@
 package com.danefinlay.ttsutil.ui
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.view.textclassifier.TextClassificationManager
+import android.view.textclassifier.TextLanguage
+import androidx.annotation.RequiresApi
 import com.danefinlay.ttsutil.ACTION_READ_CLIPBOARD
 import com.danefinlay.ttsutil.TTSIntentService
 import com.danefinlay.ttsutil.TTS_NOT_READY
@@ -76,7 +80,22 @@ class ReadTextActivity : QuickShareActivity() {
         val intent = intent ?: return
         if (intent.action == Intent.ACTION_SEND) {
             val text = intent.getStringExtra(Intent.EXTRA_TEXT)
-            TTSIntentService.startActionReadText(this, text)
+            TTSIntentService.startActionReadText(this, text, null)
+        }
+    }
+}
+class ReadTextQuickActivity : QuickShareActivity() {
+    @RequiresApi(Build.VERSION_CODES.Q)
+    override fun startServiceAction() {
+        val intent = intent ?: return
+        if (intent.action == Intent.ACTION_PROCESS_TEXT) {
+            val textClassificationManager = getSystemService(TEXT_CLASSIFICATION_SERVICE) as TextClassificationManager
+            val text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
+            val textClassifier = textClassificationManager.textClassifier
+
+            val textRequest = TextLanguage.Request.Builder(text.toString()).build()
+            val locale = textClassifier.detectLanguage(textRequest).getLocale(0).toLocale()
+            TTSIntentService.startActionReadText(this, text, locale)
         }
     }
 }

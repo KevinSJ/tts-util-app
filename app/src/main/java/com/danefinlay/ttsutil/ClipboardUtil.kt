@@ -26,6 +26,7 @@ import android.os.Build
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.runOnUiThread
 
+
 /**
  * Get the clipboard text, if any.
  *

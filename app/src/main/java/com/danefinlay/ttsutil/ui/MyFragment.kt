@@ -4,8 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.support.v4.app.Fragment
-import com.danefinlay.ttsutil.R
+import androidx.fragment.app.Fragment
 import com.danefinlay.ttsutil.*
 import org.jetbrains.anko.AlertDialogBuilder
 

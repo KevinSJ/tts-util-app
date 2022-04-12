@@ -26,9 +26,12 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.*
 import android.speech.tts.UtteranceProgressListener
-import android.support.annotation.CallSuper
 import android.util.Log
-import org.jetbrains.anko.*
+import androidx.annotation.CallSuper
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.longToast
+import org.jetbrains.anko.runOnUiThread
+import org.jetbrains.anko.toast
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -61,6 +64,7 @@ abstract class MyUtteranceProgressListener(ctx: Context, val tts: TextToSpeech) 
         tts.setOnUtteranceProgressListener(this)
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith("onError(utteranceId, -1)"))
     override fun onError(utteranceId: String?) { // deprecated
         onError(utteranceId, -1)
     }
@@ -215,6 +219,7 @@ class SpeakingEventListener(ctx: Context,
         TTSEventListener(ctx, tts, inputStream, inputSize,
                 TASK_ID_READ_TEXT, observer) {
 
+
     override fun begin() {
         // Request audio focus.  Finish early if our request was denied.
         if (!app.requestAudioFocus()) {
@@ -270,6 +275,7 @@ class SpeakingEventListener(ctx: Context,
                 }
                 is Filter.NoFilter -> {}
             }
+
 
             // Avoid hitting Android's input text limit.  We try to break nicely on
             // a whitespace character close to the limit.  If there is no word

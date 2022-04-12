@@ -32,9 +32,12 @@ import android.os.Build
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
 import android.speech.tts.TextToSpeech.QUEUE_FLUSH
-import android.support.v4.app.NotificationCompat
-import android.support.v7.preference.PreferenceManager
-import org.jetbrains.anko.*
+import androidx.core.app.NotificationCompat
+import androidx.preference.PreferenceManager
+import org.jetbrains.anko.audioManager
+import org.jetbrains.anko.longToast
+import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.runOnUiThread
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.InputStream
@@ -54,6 +57,7 @@ class ApplicationEx : Application(), OnInitListener, TaskProgressObserver {
     private var errorMessage: String? = null
     private val progressObservers = mutableSetOf<TaskProgressObserver>()
     private var notificationBuilder: NotificationCompat.Builder? = null
+
 
     /**
      * Whether the TTS is ready to synthesize text into speech.
@@ -432,7 +436,7 @@ class ApplicationEx : Application(), OnInitListener, TaskProgressObserver {
 
     }
 
-    fun speak(inStream: InputStream, size: Long, queueMode: Int): Int {
+    private fun speak(inStream: InputStream, size: Long, queueMode: Int): Int {
         val tts = mTTS
 
         // If TTS is not yet ready, return early.

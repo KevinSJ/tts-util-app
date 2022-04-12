@@ -30,6 +30,7 @@ import org.jetbrains.anko.ctx
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.runOnUiThread
+import java.util.*
 
 // IntentService actions.
 private const val ACTION_READ_TEXT = "${APP_NAME}.action.READ_TEXT"
@@ -55,7 +56,8 @@ class TTSIntentService : IntentService("TTSIntentService") {
 
         // Retrieve text to handle, if any.
         val text = intent.getStringExtra(EXTRA_TEXT) ?: ""
-
+        val locale = intent.extras?.get("locale")
+        myApplication.mTTS?.language = locale as Locale?
         // Handle actions.
         when (intent.action) {
             ACTION_EDIT_READ_TEXT -> handleActionEditReadText(text)
@@ -151,9 +153,12 @@ class TTSIntentService : IntentService("TTSIntentService") {
             ctx.startService(intent)
         }
 
-        private fun startTextAction(ctx: Context, actionString: String,
-                                    text: String?) {
-            startAction(ctx, actionString) { putExtra(EXTRA_TEXT, text) }
+        private fun startTextAction(
+            ctx: Context, actionString: String,
+            text: String?,
+            locale: Locale?
+        ) {
+            startAction(ctx, actionString) { putExtra(EXTRA_TEXT, text); putExtra("locale", locale) }
         }
 
         /**
@@ -163,8 +168,8 @@ class TTSIntentService : IntentService("TTSIntentService") {
          * @see IntentService
          */
         @JvmStatic
-        fun startActionReadText(ctx: Context, text: String?) =
-                startTextAction(ctx, ACTION_READ_TEXT, text)
+        fun startActionReadText(ctx: Context, text: String?, locale: Locale?) =
+                startTextAction(ctx, ACTION_READ_TEXT, text, locale)
 
         /**
          * Starts this service to perform action EditReadText. If the service is
@@ -174,7 +179,7 @@ class TTSIntentService : IntentService("TTSIntentService") {
          */
         @JvmStatic
         fun startActionEditReadText(ctx: Context, text: String) =
-                startTextAction(ctx, ACTION_EDIT_READ_TEXT, text)
+                startTextAction(ctx, ACTION_EDIT_READ_TEXT, text, null)
 
         /**
          * Starts this service to perform action ReadClipboard. If the service is

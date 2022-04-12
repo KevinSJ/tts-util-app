@@ -45,6 +45,7 @@ abstract class TTSActivity: MyAppCompatActivity(), TextToSpeech.OnInitListener {
         if (savedInstanceState == null && !myApplication.ttsReady) {
             myApplication.setupTTS(this, null)
         }
+
     }
 
     override fun onInit(status: Int) {
@@ -141,13 +142,13 @@ abstract class TTSActivity: MyAppCompatActivity(), TextToSpeech.OnInitListener {
                 }
 
                 // Dispatch an event with the sample text.
-                val event = ActivityEvent.SampleTextReceivedEvent(sampleText)
+                val event = ActivityEvent.SampleTextReceivedEvent(sampleText!!)
                 handleActivityEvent(event)
             }
         }
     }
 
-    fun startInstallTTSDataActivity() {
+    private fun startInstallTTSDataActivity() {
         // Initialize the start activity intent.
         val intent = Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA)
 

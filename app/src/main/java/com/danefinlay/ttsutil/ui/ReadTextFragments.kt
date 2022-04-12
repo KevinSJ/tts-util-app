@@ -25,8 +25,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Environment
 import android.speech.tts.TextToSpeech.QUEUE_ADD
-import android.support.design.widget.TextInputLayout
-import android.support.v7.preference.PreferenceManager
+import com.google.android.material.textfield.TextInputLayout
+import androidx.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
