@@ -20,7 +20,7 @@
 
 <resources>
     <!--Labels and names.-->
-    <string name="app_name">TTS Util</string>
+    <string name="app_name" translatable="false">TTS Util</string>
     <string name="app_name_long">Text-to-Speech Utility</string>
     <string name="tts_input_label">Enter text to synthesize…</string>
 

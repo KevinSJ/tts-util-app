@@ -30,6 +30,8 @@ import androidx.annotation.RequiresApi
 import com.danefinlay.ttsutil.ACTION_READ_CLIPBOARD
 import com.danefinlay.ttsutil.TTSIntentService
 import com.danefinlay.ttsutil.TTS_NOT_READY
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 /**
  * Activity to quickly read text from an input source.
@@ -89,13 +91,17 @@ class ReadTextQuickActivity : QuickShareActivity() {
     override fun startServiceAction() {
         val intent = intent ?: return
         if (intent.action == Intent.ACTION_PROCESS_TEXT) {
-            val textClassificationManager = getSystemService(TEXT_CLASSIFICATION_SERVICE) as TextClassificationManager
-            val text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
-            val textClassifier = textClassificationManager.textClassifier
+            doAsync {
+                val textClassificationManager = getSystemService(TEXT_CLASSIFICATION_SERVICE) as TextClassificationManager
+                val text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
+                val textClassifier = textClassificationManager.textClassifier
 
-            val textRequest = TextLanguage.Request.Builder(text.toString()).build()
-            val locale = textClassifier.detectLanguage(textRequest).getLocale(0).toLocale()
-            TTSIntentService.startActionReadText(this, text, locale)
+                val textRequest = TextLanguage.Request.Builder(text.toString()).build()
+                val locale = textClassifier.detectLanguage(textRequest).getLocale(0).toLocale()
+                uiThread {
+                    TTSIntentService.startActionReadText(it, text, locale)
+                }
+            }
         }
     }
 }

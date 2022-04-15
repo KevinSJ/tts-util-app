@@ -24,7 +24,7 @@
     package="com.danefinlay.ttsutil">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
 
     <application
         android:name=".ApplicationEx"
@@ -92,7 +92,7 @@
             android:label="@string/read_text_fragment_label"
             android:exported="true"
             android:taskAffinity=""
-            android:theme="@android:style/Theme.NoDisplay">
+            android:theme="@style/Theme.AppCompat.DayNight">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
 
@@ -104,6 +104,7 @@
 
         <service
             android:name=".TTSIntentService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="false" />
     </application>
 
