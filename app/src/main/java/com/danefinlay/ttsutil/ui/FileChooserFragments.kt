@@ -22,17 +22,19 @@ package com.danefinlay.ttsutil.ui
 
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.speech.tts.TextToSpeech.QUEUE_ADD
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.danefinlay.ttsutil.*
-import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.find
+import org.jetbrains.anko.AlertDialogBuilder
+import org.jetbrains.anko.onClick
 import java.io.File
+
+inline fun <reified T : View> Fragment.find(id: Int): T = view?.findViewById(id) as T
 
 
 abstract class FileChooserFragment : MyFragment() {
@@ -43,20 +45,21 @@ abstract class FileChooserFragment : MyFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set OnClick listener for common buttons.
-        find<ImageButton>(R.id.stop_button).onClick { myApplication.stopSpeech() }
+        view.findViewById<ImageButton>(R.id.stop_button).onClick { myApplication.stopSpeech() }
 
         // Set text fields.
         val event1 = activityInterface?.getLastStatusUpdate()
-        if (event1 != null) onStatusUpdate(event1)
+        if (event1 != null) onStatusUpdate( event1)
         val event2 = activityInterface?.getLastFileChosenEvent()
-        if (event2 != null) onFileChosen(event2)
+        if (event2 != null) onFileChosen( event2)
     }
 
-    protected fun onFileChosen(event: ActivityEvent.FileChosenEvent) {
+    private fun onFileChosen(event: ActivityEvent.FileChosenEvent) {
         // Set the property and display name text field.
         fileChosenEvent = event
         var text = event.displayName
         if (text.isEmpty()) text = getString(R.string.no_file_chosen_dec)
+
         find<TextView>(R.id.chosen_filename).text = text
     }
 
@@ -112,9 +115,9 @@ class ReadFilesFragment : FileChooserFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set OnClick listeners.
-        find<ImageButton>(R.id.play_file_button).onClick { onClickPlay() }
-        find<ImageButton>(R.id.save_button).onClick { onClickSave() }
-        find<ImageButton>(R.id.choose_file_button)
+        view.findViewById<ImageButton>(R.id.play_file_button).onClick { onClickPlay() }
+        view.findViewById<ImageButton>(R.id.save_button).onClick { onClickSave() }
+        view.findViewById<ImageButton>(R.id.choose_file_button)
                 .onClick { activityInterface?.showFileChooser() }
     }
 
@@ -146,7 +149,7 @@ class ReadFilesFragment : FileChooserFragment() {
         // TODO Handle an already existing wave file.
         // TODO Allow the user to select a custom directory.
         // Synthesize the file's content into a wave file and handle the result.
-        val dir = Environment.getExternalStorageDirectory()
+        val dir = ctx.getExternalFilesDir(null)
         val file = File(dir, waveFilename)
         when (val result = myApplication.synthesizeToFile(uri, file)) {
             INVALID_FILE_URI -> buildInvalidFileAlertDialog(uri).show()

@@ -3,7 +3,6 @@ package com.danefinlay.ttsutil.ui
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.fragment.app.Fragment
 import com.danefinlay.ttsutil.*
 import org.jetbrains.anko.AlertDialogBuilder
@@ -61,24 +60,18 @@ abstract class MyFragment : Fragment(), FragmentInterface {
 
     fun withStoragePermission(block: (granted: Boolean) -> Unit) {
         // Check if we have write permission.
-        if (Build.VERSION.SDK_INT >= 23) {
-            val permission = ctx.checkSelfPermission(
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            if (permission != PackageManager.PERMISSION_GRANTED) {
-                // We don't have permission, so prompt the user.
-                requestPermissions(PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE)
+        val permission = ctx.checkSelfPermission(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission, so prompt the user.
+            requestPermissions(PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE)
 
-                // Store the function so we can execute it later if the user
-                // grants us storage permission.
-                tempStoragePermissionBlock = block
-            }
-            else {
-                // We have permission, so execute the function.
-                block(true)
-            }
-        } else {
-            // No need to check permission before Android 23, so execute the
-            // function.
+            // Store the function so we can execute it later if the user
+            // grants us storage permission.
+            tempStoragePermissionBlock = block
+        }
+        else {
+            // We have permission, so execute the function.
             block(true)
         }
     }

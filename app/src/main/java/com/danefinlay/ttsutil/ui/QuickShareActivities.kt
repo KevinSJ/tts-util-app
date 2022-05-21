@@ -32,6 +32,7 @@ import com.danefinlay.ttsutil.TTSIntentService
 import com.danefinlay.ttsutil.TTS_NOT_READY
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import java.util.*
 
 /**
  * Activity to quickly read text from an input source.
@@ -65,6 +66,7 @@ abstract class QuickShareActivity : TTSActivity() {
         }
     }
 
+
     override fun handleActivityEvent(event: ActivityEvent) {}
 }
 
@@ -97,7 +99,10 @@ class ReadTextQuickActivity : QuickShareActivity() {
                 val textClassifier = textClassificationManager.textClassifier
 
                 val textRequest = TextLanguage.Request.Builder(text.toString()).build()
-                val locale = textClassifier.detectLanguage(textRequest).getLocale(0).toLocale()
+                val detectedLanguage = textClassifier.detectLanguage(textRequest)
+                val localeDetected = detectedLanguage.getLocale(0)
+                val confidence = detectedLanguage.getConfidenceScore(localeDetected) * 100.0
+                val locale = if (confidence >= 80f) localeDetected.toLocale() else Locale.ENGLISH
                 uiThread {
                     TTSIntentService.startActionReadText(it, text, locale)
                 }

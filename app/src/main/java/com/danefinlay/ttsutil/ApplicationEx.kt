@@ -28,7 +28,6 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
 import android.net.Uri
-import android.os.Build
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
 import android.speech.tts.TextToSpeech.QUEUE_FLUSH
@@ -100,19 +99,16 @@ class ApplicationEx : Application(), OnInitListener, TaskProgressObserver {
 
     private val audioFocusGain = AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
     private val audioFocusRequest: AudioFocusRequest by lazy {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val audioAttributes = AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                    .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
-                    .build()
-            AudioFocusRequest.Builder(audioFocusGain)
-                    .setAudioAttributes(audioAttributes)
-                    .setAcceptsDelayedFocusGain(true)
-                    .setOnAudioFocusChangeListener(onAudioFocusChangeListener)
-                    .build()
-        } else
-            throw RuntimeException("should not use AudioFocusRequest below SDK v26")
+        val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                .build()
+        AudioFocusRequest.Builder(audioFocusGain)
+                .setAudioAttributes(audioAttributes)
+                .setAcceptsDelayedFocusGain(true)
+                .setOnAudioFocusChangeListener(onAudioFocusChangeListener)
+                .build()
     }
 
     private val onAudioFocusChangeListener = OnAudioFocusChangeListener {
@@ -128,14 +124,8 @@ class ApplicationEx : Application(), OnInitListener, TaskProgressObserver {
 
     fun requestAudioFocus(): Boolean {
         val audioManager = audioManager
-        val success = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val success =
             audioManager.requestAudioFocus(audioFocusRequest)
-        } else {
-            @Suppress("deprecation")
-            audioManager.requestAudioFocus(
-                    onAudioFocusChangeListener, AudioManager.STREAM_MUSIC,
-                    audioFocusGain)
-        }
 
         // Check the success value.
         return success == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
@@ -145,12 +135,7 @@ class ApplicationEx : Application(), OnInitListener, TaskProgressObserver {
         // Abandon the audio focus using the same context and
         // AudioFocusChangeListener used to request it.
         val audioManager = audioManager
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            @Suppress("deprecation")
-            audioManager.abandonAudioFocus(onAudioFocusChangeListener)
-        } else {
-            audioManager.abandonAudioFocusRequest(audioFocusRequest)
-        }
+        audioManager.abandonAudioFocusRequest(audioFocusRequest)
     }
 
     fun cleanupFiles() {
@@ -158,7 +143,7 @@ class ApplicationEx : Application(), OnInitListener, TaskProgressObserver {
         // them.
 
         // Clean up no longer needed internal files.
-        (filesDir.listFiles() + cacheDir.listFiles()).forEach { f ->
+        (cacheDir.listFiles()?.let { filesDir.listFiles()?.plus(it) })?.forEach { f ->
             if (f.isFile && f.canWrite()) {
                 f.delete()
             }
@@ -471,7 +456,7 @@ class ApplicationEx : Application(), OnInitListener, TaskProgressObserver {
         return SUCCESS
     }
 
-    fun synthesizeToFile(inputStream: InputStream, size: Long, outFile: File): Int {
+    private fun synthesizeToFile(inputStream: InputStream, size: Long, outFile: File): Int {
         val tts = mTTS
 
         // If TTS is not yet ready, return early.
