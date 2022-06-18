@@ -64,7 +64,6 @@ abstract class MyUtteranceProgressListener(ctx: Context, val tts: TextToSpeech) 
         tts.setOnUtteranceProgressListener(this)
     }
 
-    @Deprecated("Deprecated in Java", ReplaceWith("onError(utteranceId, -1)"))
     override fun onError(utteranceId: String?) { // deprecated
         onError(utteranceId, -1)
     }
@@ -91,7 +90,7 @@ abstract class TTSEventListener(ctx: Context,
     protected lateinit var reader: BufferedReader
     protected val maxInputLength = getMaxSpeechInputLength()
     private var inputProcessed: Long = 0
-    protected var streamHasFurtherInput: Boolean = true
+    private var streamHasFurtherInput: Boolean = true
     protected var utteranceBytesQueue = mutableListOf<Int>()
 
     abstract fun enqueueNextInput(): Boolean
@@ -245,7 +244,10 @@ class SpeakingEventListener(ctx: Context,
         // Add text to the queue as an utterance.
         val bundle = Bundle()
         bundle.putInt(Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC)
-        tts.speak(text, queueMode, bundle, nextUtteranceId())
+        Log.i("TTS", "enqueued")
+
+        val result = tts.speak(text, queueMode, bundle, nextUtteranceId())
+        Log.i("TTS", "Enqueued result $result")
     }
 
     override fun enqueueNextInput(): Boolean {

@@ -173,16 +173,6 @@ class TTSIntentService : JobIntentService() {
                 startTextAction(ctx, ACTION_READ_TEXT, text, locale)
 
         /**
-         * Starts this service to perform action EditReadText. If the service is
-         * already performing a task this action will be queued.
-         *
-         * @see IntentService
-         */
-        @JvmStatic
-        fun startActionEditReadText(ctx: Context, text: String) =
-                startTextAction(ctx, ACTION_EDIT_READ_TEXT, text, null)
-
-        /**
          * Starts this service to perform action ReadClipboard. If the service is
          * already performing a task this action will be queued.
          *
@@ -192,27 +182,6 @@ class TTSIntentService : JobIntentService() {
         fun startActionReadClipboard(ctx: Context) =
                 startAction(ctx, ACTION_READ_CLIPBOARD) {}
 
-        /**
-         * Starts this service to perform action EditReadClipboard. If the service
-         * is already performing a task this action will be queued.
-         *
-         * @see IntentService
-         */
-        @JvmStatic
-        fun startActionEditReadClipboard(ctx: Context) =
-                startAction(ctx, ACTION_EDIT_READ_CLIPBOARD) {}
-
-        /**
-         * Starts this service to perform action StopSpeaking. If the service is
-         * already performing a task this action will be queued.
-         *
-         * @see IntentService
-         */
-        @JvmStatic
-        fun startActionStopSpeaking(ctx: Context, notificationId: Int) =
-                startAction(ctx, ACTION_STOP_SPEAKING) {
-                    putExtra("notificationId", notificationId)
-                }
     }
 
     /**

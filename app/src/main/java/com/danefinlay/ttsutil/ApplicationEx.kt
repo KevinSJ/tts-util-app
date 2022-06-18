@@ -31,6 +31,7 @@ import android.net.Uri
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
 import android.speech.tts.TextToSpeech.QUEUE_FLUSH
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import org.jetbrains.anko.audioManager
@@ -486,6 +487,7 @@ class ApplicationEx : Application(), OnInitListener, TaskProgressObserver {
     fun speak(text: String, queueMode: Int): Int {
         // Get an input stream from the text.  This is done because
         val inStream = ByteArrayInputStream(text.toByteArray())
+        Log.i("TTS",text.toByteArray().size.toString())
         val size = text.length.toLong()
         return speak(inStream, size, queueMode)
     }

@@ -33,12 +33,8 @@ import java.util.*
 val currentSystemLocale: Locale?
     get() {
         val systemConfig = Resources.getSystem().configuration
-        val systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        val systemLocale =
             systemConfig?.locales?.get(0)
-        } else {
-            @Suppress("deprecation")
-            systemConfig?.locale
-        }
 
         // Return the system locale.
         return systemLocale

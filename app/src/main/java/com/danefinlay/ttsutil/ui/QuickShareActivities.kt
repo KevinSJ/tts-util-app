@@ -110,13 +110,3 @@ class ReadTextQuickActivity : QuickShareActivity() {
         }
     }
 }
-class TextActionActivity : QuickShareActivity() {
-    @RequiresApi(Build.VERSION_CODES.M)
-    override fun startServiceAction() {
-        val intent = intent ?: return
-        if (intent.action == Intent.ACTION_PROCESS_TEXT) {
-            val text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
-            TTSIntentService.startActionReadText(this, text)
-        }
-    }
-}

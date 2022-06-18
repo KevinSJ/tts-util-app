@@ -19,7 +19,7 @@ abstract class MyAppCompatActivity : AppCompatActivity(),
             ActivityEvent.StatusUpdateEvent(100, TASK_ID_IDLE)
 
     protected var mLastStatusUpdate = idleStatusEvent
-    protected var mLastChosenFileEvent: ActivityEvent.FileChosenEvent? = null
+    private var mLastChosenFileEvent: ActivityEvent.FileChosenEvent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

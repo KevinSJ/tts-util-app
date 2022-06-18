@@ -20,7 +20,10 @@
 
 package com.danefinlay.ttsutil
 
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder.LITTLE_ENDIAN
 
@@ -76,8 +79,8 @@ class WaveFileHeader(stream: InputStream) {
 
     class RIFFChunk(ckHeader: ChunkHeader, stream: InputStream) : Chunk(ckHeader) {
         // RIFF chunk descriptor fields.
-        val bFormat: ByteArray = stream.read(4)
-        val format: String = bFormat.toAsciiString()
+        private val bFormat: ByteArray = stream.read(4)
+        private val format: String = bFormat.toAsciiString()
 
         init {
             // Verify that the WAVE identifier is present.
@@ -104,21 +107,21 @@ class WaveFileHeader(stream: InputStream) {
 
     class FmtSubChunk(ckHeader: ChunkHeader, stream: InputStream) : Chunk(ckHeader) {
         // "fmt " sub-chunk fields.
-        val bAudioFormat: ByteArray
-        val bNumChannels: ByteArray
-        val bSampleRate: ByteArray
-        val bByteRate: ByteArray
-        val bBlockAlign: ByteArray
-        val bBitsPerSample: ByteArray
-        val audioFormat: Short
+        private val bAudioFormat: ByteArray
+        private val bNumChannels: ByteArray
+        private val bSampleRate: ByteArray
+        private val bByteRate: ByteArray
+        private val bBlockAlign: ByteArray
+        private val bBitsPerSample: ByteArray
+        private val audioFormat: Short
         val numChannels: Short
-        val sampleRate: Int
-        val byteRate: Int
-        val blockAlign: Short
-        val bitsPerSample: Short
-        val bExtraParamsSize: ByteArray?
-        val extraParamsSize: Short?
-        val bExtraParams: ByteArray?
+        private val sampleRate: Int
+        private val byteRate: Int
+        private val blockAlign: Short
+        private val bitsPerSample: Short
+        private val bExtraParamsSize: ByteArray?
+        private val extraParamsSize: Short?
+        private val bExtraParams: ByteArray?
 
         init {
             if (ckId != "fmt ") {
@@ -193,8 +196,8 @@ class WaveFileHeader(stream: InputStream) {
     class FactSubChunk(ckHeader: ChunkHeader,
                        stream: InputStream) : Chunk(ckHeader) {
         // "fact"  sub-chunk fields.
-        val sampleLength: Int?
-        val bSampleLength: ByteArray?
+        private val sampleLength: Int?
+        private val bSampleLength: ByteArray?
 
         init {
             if (ckId != "fact") {

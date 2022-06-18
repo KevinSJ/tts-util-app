@@ -23,24 +23,24 @@ package com.danefinlay.ttsutil.ui
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Environment
 import android.speech.tts.TextToSpeech.QUEUE_ADD
-import com.google.android.material.textfield.TextInputLayout
-import androidx.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.preference.PreferenceManager
 import com.danefinlay.ttsutil.*
-import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.find
+import com.google.android.material.textfield.TextInputLayout
+import org.jetbrains.anko.AlertDialogBuilder
+import org.jetbrains.anko.onClick
+import org.jetbrains.anko.toast
 import java.io.File
 
 abstract class ReadTextFragmentBase : MyFragment() {
 
     protected var playbackOnStart: Boolean = false
-    protected val inputLayout: TextInputLayout
+    private val inputLayout: TextInputLayout
         get() = find(R.id.input_layout)
 
     var inputLayoutContent: String?
@@ -140,7 +140,7 @@ abstract class ReadTextFragmentBase : MyFragment() {
         // TODO Handle an already existing wave file.
         // TODO Allow the user to select a custom directory.
         // Synthesize the text into a wave file and handle the result.
-        val dir = Environment.getExternalStorageDirectory()
+        val dir = ctx.getExternalFilesDir(null)
         val file = File(dir, filename)
         val result = myApplication.synthesizeToFile(text, file)
         myApplication.handleTTSOperationResult(result)

@@ -118,16 +118,3 @@ fun Uri.openContentInputStream(ctx: Context): InputStream? {
 }
 
 
-/**
- * Open an output stream on to the content associated with the URI, assuming content
- * exists.
- *
- * Write permission is taken prior to opening the output stream.
- */
-fun Uri.openContentOutputStream(ctx: Context): OutputStream? {
-    // Ensure we have permission to write content.
-    takeWriteUriPermission(ctx)
-
-    // Open an output stream.
-    return ctx.contentResolver.openOutputStream(this)
-}

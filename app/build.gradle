@@ -15,10 +15,6 @@ android {
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
-    lintOptions {
-        // This is for gradle's lint tasks (e.g. lintDebug).
-        abortOnError true
-    }
 
     buildTypes {
         release {
@@ -26,20 +22,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lint {
+        abortOnError true
+    }
+    namespace 'com.danefinlay.ttsutil'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment:2.0.0-rc02'
-    implementation 'androidx.navigation:navigation-ui:2.0.0-rc02'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0-rc02'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.0.0-rc02'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0-rc02'
     implementation 'androidx.navigation:navigation-ui-ktx:2.0.0-rc02'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'androidx.preference:preference:1.0.0'
+    implementation 'androidx.preference:preference-ktx:1.0.0'
     implementation 'org.jetbrains.anko:anko-sdk15:0.9'
     implementation 'org.jetbrains.anko:anko-support-v4:0.9.1'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

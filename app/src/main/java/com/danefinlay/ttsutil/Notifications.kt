@@ -76,7 +76,7 @@ fun getNotificationBuilder(ctx: Context, notificationId: Int):
     // Set up the notification
     // Use the correct notification builder method
     val notificationBuilder = when {
-        Build.VERSION.SDK_INT >= 26 -> {
+        true -> {
             val id = ctx.getString(R.string.app_name)
             val importance = NotificationManager.IMPORTANCE_LOW
             ctx.notificationManager.createNotificationChannel(
