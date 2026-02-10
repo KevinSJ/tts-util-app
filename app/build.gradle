@@ -9,8 +9,8 @@ android {
         applicationId "com.danefinlay.ttsutil"
         minSdkVersion 21
         targetSdkVersion 35
-        versionCode 9
-        versionName "4.1.0"
+        versionCode 10
+        versionName "4.1.1"
     }
 
     compileOptions {
